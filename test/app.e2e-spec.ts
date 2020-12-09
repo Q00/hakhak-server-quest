@@ -52,16 +52,22 @@ describe('AppController (e2e)', () => {
     return request(app.getHttpServer())
       .post('/graphql')
       .send({
-        query: `mutation {createBoard(title: "${board.title}", content:"${board.content}", userName:"${name}"){content}}`,
+        query: `mutation {createBoard(title: "${board.title}", content:"${board.content}", userName:"${name}"){title content}}`,
       })
       .expect(200)
       .expect(({ body }) => {
         expect(body.data.createBoard.title).toBe(board.title);
+        expect(body.data.createBoard.content).toBe(board.content);
       });
   });
 
   it('boards of user', () => {
     const name = 'hakhak';
+    const expected = {
+      author: {
+        name: 'hakhak',
+      },
+    };
 
     return request(app.getHttpServer())
       .post('/graphql')
@@ -70,7 +76,7 @@ describe('AppController (e2e)', () => {
       })
       .expect(200)
       .expect(({ body }) => {
-        expect(body.data.getBoards).toBe(expect.arrayContaining(['author']));
+        expect(body.data.getBoards).toEqual(expect.arrayContaining([expected]));
       });
   });
 });
