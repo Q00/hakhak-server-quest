@@ -1,12 +1,6 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { Board } from './board.model';
 import { BoardService } from './board.service';
-import { CreateBoardDto } from './DTO/create-board.dto';
-
-interface BoardInputArgs {
-  title: string;
-  content: string;
-}
 
 @Resolver('Board')
 export class BoardResolver {
@@ -14,10 +8,10 @@ export class BoardResolver {
 
   @Mutation(() => Board)
   createBoard(
-    @Args('board', { type: () => CreateBoardDto })
-    board: CreateBoardDto,
-    @Args('name', { type: () => String }) name: string,
+    @Args('title', { type: () => String }) title: string,
+    @Args('content', { type: () => String }) content: string,
+    @Args('userName', { type: () => String }) userName: string,
   ) {
-    return this._boardService.createBoard(board, name);
+    return this._boardService.createBoard(title, content, userName);
   }
 }

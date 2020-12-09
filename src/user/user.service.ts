@@ -4,6 +4,17 @@ import { User } from './user.model';
 
 @Injectable()
 export class UserService {
+  async findOneByName(name: string) {
+    try {
+      const existedUser = await getRepository(User).findOne({ name });
+      if (existedUser) {
+        throw Error('User already exists.');
+      }
+    } catch (error) {
+      throw Error(error);
+    }
+  }
+
   async createUser(name: string) {
     try {
       const existedUser = await getRepository(User).findOne({ name });
