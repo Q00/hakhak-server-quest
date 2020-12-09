@@ -1,14 +1,21 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { getRepository } from 'typeorm';
 import { User } from './user.model';
 
 @Injectable()
 export class UserService {
-  constructor(
-    @InjectRepository(User)
-    private _usersRepository: Repository<User>,
-  ) {
-    console.log('use this repository user', User);
+  async createUser(name: string) {
+    try {
+      const existedUser = await getRepository(User).findOne({ name });
+      console.log(existedUser);
+      if (existedUser) {
+        throw Error('User already exists.');
+      }
+      const newUser = await getRepository(User).create({ name });
+      await getRepository(User).save(newUser);
+      return newUser;
+    } catch (error) {
+      throw Error(error);
+    }
   }
 }
