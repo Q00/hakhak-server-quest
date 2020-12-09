@@ -19,7 +19,6 @@ export class UserService {
   }
 
   async deleteUser(id: number) {
-    console.log('id', id);
     try {
       const existedUser = await getRepository(User).findOne({ id });
 
